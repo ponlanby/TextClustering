@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,31 +18,20 @@ public class CreateVSM {
 	private static final String RESULT_PATH = "C:\\Users\\Administrator\\Desktop\\vsm";
 	private static final String WORD_SPLITER = ",";
 	
-	public HashMap<String, Integer> createVSM(HashSet<String> totalWordList, String txtContent){
-		HashMap<String, Integer> vsm = new HashMap<String, Integer>();
+	public int[] createVSM(ArrayList<String> vsmWordList, String txtContent){
+		int totalWordsNum = vsmWordList.size();
+		int[] vsmVector = new int[totalWordsNum];
 		txtContent = txtContent.replace(" ", "");
 		txtContent = txtContent.replace("[", "");
 		txtContent = txtContent.replace("]", "");
 		String[] wordList = txtContent.split(WORD_SPLITER);	
-		//put all words from txt file into vsm first
 		for(String word:wordList){
-			if(!vsm.containsKey(word)){
-				vsm.put(word, 1);
-			}
-			else{
-				vsm.put(word, vsm.get(word)+1);
+			int wordIndex = vsmWordList.indexOf(word);
+			if(wordIndex!=-1){
+				vsmVector[wordIndex] += 1;				
 			}
 		}
-		//add rest words from totalWordList to vsm
-		Iterator<String> it = totalWordList.iterator();	
-		while(it.hasNext()){
-			String key = it.next();
-			key = key.trim();
-			if(!vsm.containsKey(key)){
-				vsm.put(key, 0);
-			}
-		}
-		return vsm;
+		return vsmVector;
 		
 		//output result for test use
 //		Iterator it2 = vsm.entrySet().iterator();

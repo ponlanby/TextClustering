@@ -21,28 +21,44 @@ public class TF_IDF {
 	private static final String RESULT_PATH = "C:\\Users\\Administrator\\Desktop\\TD_IDF";
 	private static final String WORD_SPLITER = ",";	
 	
-	public static void test(HashMap<Integer, HashMap<String, Integer>> TF_IDF_List){
-		Iterator it1 = TF_IDF_List.entrySet().iterator();
-//		System.out.println(TF_IDF_List.size());
-		int totalTxtNum = TF_IDF_List.size();
-		while(it1.hasNext()){
-			Map.Entry<Integer, HashMap<String, Integer>> entry= (Entry<Integer, HashMap<String, Integer>>) it1.next();
-			Integer id = entry.getKey();
-			System.out.println("TXT: " + id);
-			HashMap<String, Integer> vsm = entry.getValue();
-			Iterator it2 = vsm.entrySet().iterator();
-			while(it2.hasNext()){
-				Map.Entry<String, Integer> entry2 = (Entry<String, Integer>) it2.next();
-				int numOfWord = entry2.getValue();
-				int totalWordsInTxt = vsm.size();
+	public static void test(File subRoot, ArrayList<String> totalWords) throws IOException, FileNotFoundException{
+		File[] directory = subRoot.listFiles();
+		InputStreamReader isr = null;
+		BufferedReader br = null;
+		CreateVSM creator = new CreateVSM();
+		
+//		int txtID = 0;
+		for(File dir:directory){
+			File[] txts = dir.listFiles();
+			ArrayList<String> txtNameList = new ArrayList<String>();
+			ArrayList<int[]> vsmMatrix = new ArrayList<int[]>();
+			for(File txt:txts){
+				String fileName = txt.getName();
+				txtNameList.add(fileName);
+				StringBuilder sb = new StringBuilder();
+				isr = new InputStreamReader(new FileInputStream(txt), "UTF-8");
+				br = new BufferedReader(isr);
+				while(br.ready()){
+					sb.append(br.readLine());
+				}
+				int[] vsmVector = creator.createVSM(totalWords, sb.toString());
+				vsmMatrix.add(vsmVector);
+				isr.close();
+				br.close();
 			}
-			System.out.println();
+			//calculate TF_IDF matrix
+			calculateTFIDFMatrix(vsmMatrix);
+			
 		}
+	}
+	
+	public static void calculateTFIDFMatrix(ArrayList<int[]> vsmMatrix){
+		ArrayList<int[]> tfidfMatrix = new ArrayList<int[]>();
+		http://www.chepoo.com/tf-idf-java-implementation.html
 	}
 	
 
 	public static HashMap<Integer, HashMap<String, Integer>> generateTD_IDF(File subRoot, HashSet<String> totalWords) throws IOException, FileNotFoundException{
-//		File subRoot = new File(subRootPath);
 		File[] directory = subRoot.listFiles();
 		InputStreamReader isr = null;
 		BufferedReader br = null;
@@ -68,27 +84,9 @@ public class TF_IDF {
 		}
 		
 		return TF_IDF_List;
-		
-		//test output
-//		Iterator it1 = TF_IDF_List.entrySet().iterator();
-//		System.out.println(TF_IDF_List.size());
-//		while(it1.hasNext()){
-//			Map.Entry<Integer, HashMap<String, Integer>> entry= (Entry<Integer, HashMap<String, Integer>>) it1.next();
-//			Integer id = entry.getKey();
-//			System.out.println("TXT: " + id);
-//			HashMap<String, Integer> vsm = entry.getValue();
-//			Iterator it2 = vsm.entrySet().iterator();
-//			while(it2.hasNext()){
-//				Map.Entry<String, Integer> entry2 = (Entry<String, Integer>) it2.next();
-//				String word = entry2.getKey();
-//				Integer count = entry2.getValue();
-//				System.out.print(word + ": " + count + "    ");				
-//			}
-//			System.out.println();
-//		}
 	}
 	
-	public static HashSet<String> getTotalWordsInDir(File subRoot) throws IOException, FileNotFoundException{
+	public static ArrayList<String> getTotalWordsInDir(File subRoot) throws IOException, FileNotFoundException{
 		File[] directory = subRoot.listFiles();
 		StringBuilder sb = new StringBuilder();
 		InputStreamReader isr = null;
@@ -112,7 +110,7 @@ public class TF_IDF {
 				br.close();
 			}
 		}
-		return totalWords;
+		return new ArrayList<String>(totalWords);
 	}
 	
 	public static double calculateTF(int numOfWord, int totalWordsInTxt){
