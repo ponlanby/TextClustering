@@ -15,8 +15,8 @@ import org.apdplat.word.segmentation.Word;
 
 public class Segmenter {
 	
-	private static final String ROOT_PATH = "D:\\Documents\\Tencent Files\\545852570\\FileRecv\\corp2\\";
-	private static final String RESULT_PATH = "C:\\Users\\Administrator\\Desktop\\segResult\\";
+	private static final String ROOT_PATH = "E:\\corp\\";
+	private static final String RESULT_PATH = "E:\\segResult\\";
 
 	public static void main(String[] args) throws Exception{
 //		String rootPath = "C:\\Users\\Administrator\\Desktop\\corp\\canyinmeishi\\";
@@ -39,7 +39,7 @@ public class Segmenter {
 		
 	}
 	
-	public static void TxtSegmenter(File directory) throws Exception{
+	public static void TxtSegmenter(File directory){
 		File[] txts = directory.listFiles();
 		OutputStreamWriter osw = null;
 		BufferedWriter bw = null;
@@ -67,6 +67,9 @@ public class Segmenter {
 				String segmentResult = Segment(txt);
 				bw.write(segmentResult);
 				bw.flush();
+				
+				osw.close();
+				bw.close();
 			}
 //			if(bw==null){
 //				bw.close();				
@@ -75,9 +78,9 @@ public class Segmenter {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		finally{
-			bw.close();
-		}
+//		finally{
+//			bw.close();
+//		}
 	}
 	
 	public static String Segment(File txt) throws Exception, FileNotFoundException{
@@ -92,6 +95,7 @@ public class Segmenter {
 		String result = words.toString();
 		result = result.replace("[", "");
 		result = result.replace("]", "");
+		result = result.replace(" ", "");
 		return result;
 	}
 }
