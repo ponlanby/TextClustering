@@ -21,6 +21,8 @@ public class kmeans {
     private ArrayList<ArrayList<float[]>> cluster; // 簇  
     private ArrayList<Float> jc;// 误差平方和，k越接近dataSetLength，误差越小  
     private Random random;  
+    
+    private float threshold = (float) 0.05;
   
     /** 
      * 设置需分组的原始数据集 
@@ -166,7 +168,7 @@ public class kmeans {
         float x = element[0] - center[0];  
         float y = element[1] - center[1];  
         float z = x * x + y * y;  
-        distance = (float) Math.sqrt(z);  
+        distance = (float) Math.sqrt(z);
   
         return distance;  
     }  
@@ -191,7 +193,11 @@ public class kmeans {
                     minLocation = i;  
                 }  
             }  
-        }  
+        }
+
+        if(minDistance>threshold){
+        	minLocation = k+1;
+        }
   
         return minLocation;  
     }  
@@ -207,10 +213,11 @@ public class kmeans {
                 // System.out.println("test2:"+"dataSet["+i+"],center["+j+"],distance="+distance[j]);  
   
             }  
-            int minLocation = minDistance(distance);  
+            int minLocation = minDistance(distance);
             // System.out.println("test3:"+"dataSet["+i+"],minLocation="+minLocation);  
             // System.out.println();  
   
+            if(minLocation>=0 && minLocation<k)
             cluster.get(minLocation).add(dataSet.get(i));// 核心，将当前元素放到最小距离中心相关的簇中  
   
         }  
@@ -342,7 +349,7 @@ public class kmeans {
         //初始化一个Kmean对象，将k置为10  
         kmeans k=new kmeans(4);
         
-        InputStreamReader isr = new InputStreamReader(new FileInputStream("E:\\TD_IDF\\TD_IDF.txt"), "UTF-8");
+        InputStreamReader isr = new InputStreamReader(new FileInputStream("E:\\TD_IDF\\TD_IDF2.txt"), "UTF-8");
 		BufferedReader br = new BufferedReader(isr);
 //		
         ArrayList<float[]> dataSet=new ArrayList<float[]>();  

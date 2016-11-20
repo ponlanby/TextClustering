@@ -74,23 +74,24 @@ public class TF_IDF {
 		
 		OutputStreamWriter osw = null;
 		BufferedWriter bw = null;
-		File output = new File(RESULT_PATH + "TD_IDF.txt");
+		File output = new File(RESULT_PATH + "TD_IDF_new.txt");
 		osw = new OutputStreamWriter(new FileOutputStream(output),"UTF-8");
 		bw = new BufferedWriter(osw);
 		
-		int txtCount = 0;
-		for(int[] vsmvector:vsmMatrix){
-			for(int i=0; i<vsmvector.length; i++){
-				numOfWord = vsmvector[i];
+//		int txtCount = 0;
+		for(int i=0; i<vsmMatrix.length; i++){
+//			int[] vsmVector = vsmMatrix[i];
+			for(int j=0; j<vsmMatrix[i].length; j++){
+				numOfWord = vsmMatrix[i][j];
 				numOfTotalWords = 0;
-				for(int vsm:vsmvector){
-					if(vsm!=0){
+				for(int k=0; k<vsmMatrix[i].length; k++){
+					if(vsmMatrix[i][k]!=0){
 						numOfTotalWords += 1;
 					}
-				}
+				}				
 				numOfTxtsContainWord = 0;
-				for(int[] vsm:vsmMatrix){
-					if(vsm[i]!=0){
+				for(int k=0; k<vsmMatrix.length; k++){
+					if(vsmMatrix[k][j]!=0){
 						numOfTxtsContainWord++;
 					}
 				}
@@ -99,13 +100,15 @@ public class TF_IDF {
 				double IDF = java.lang.Math.log( (double)numOfTotalTxts / (double)(numOfTxtsContainWord+1) );
 				double TF_IDF = TF * IDF;
 				
-				tfidfMatrix[txtCount][i] = String.valueOf(TF_IDF);
+				tfidfMatrix[i][j] = String.valueOf(TF_IDF);
 			}
-			for(int l = 0; l<tfidfMatrix[txtCount].length; l++){
-				bw.write(tfidfMatrix[txtCount][l] + ",");
+			for(int l = 0; l<tfidfMatrix[i].length; l++){
+				bw.write(tfidfMatrix[i][l] + ",");
 			}
 			bw.write("\r\n");
 		}
+		
+		bw.close();
 		
 		
 //		System.out.println(tfidfMatrix);
