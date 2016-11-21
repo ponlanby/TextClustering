@@ -10,22 +10,22 @@ import java.util.ArrayList;
 import java.util.Random;  
   
 /** 
- * K均值聚类算法 
+ * K鍧囧�鑱氱被绠楁硶 
  */  
 public class kmeans {  
-    private int k;// 分成多少簇  
-    private int m;// 迭代次数  
-    private int dataSetLength;// 数据集元素个数，即数据集的长度  
-    private ArrayList<float[]> dataSet;// 数据集链表  
-    private ArrayList<float[]> center;// 中心链表  
-    private ArrayList<ArrayList<float[]>> cluster; // 簇  
-    private ArrayList<Float> jc;// 误差平方和，k越接近dataSetLength，误差越小  
+    private int k;// 鍒嗘垚澶氬皯绨� 
+    private int m;// 杩唬娆℃暟  
+    private int dataSetLength;// 鏁版嵁闆嗗厓绱犱釜鏁帮紝鍗虫暟鎹泦鐨勯暱搴� 
+    private ArrayList<float[]> dataSet;// 鏁版嵁闆嗛摼琛� 
+    private ArrayList<float[]> center;// 涓績閾捐〃  
+    private ArrayList<ArrayList<float[]>> cluster; // 绨� 
+    private ArrayList<Float> jc;// 璇樊骞虫柟鍜岋紝k瓒婃帴杩慸ataSetLength锛岃宸秺灏� 
     private Random random;  
     
     private float threshold = (float) 0.05;
   
     /** 
-     * 设置需分组的原始数据集 
+     * 璁剧疆闇�垎缁勭殑鍘熷鏁版嵁闆�
      *  
      * @param dataSet 
      */  
@@ -35,9 +35,9 @@ public class kmeans {
     }  
   
     /** 
-     * 获取结果分组 
+     * 鑾峰彇缁撴灉鍒嗙粍 
      *  
-     * @return 结果集 
+     * @return 缁撴灉闆�
      */  
   
     public ArrayList<ArrayList<float[]>> getCluster() {  
@@ -45,10 +45,10 @@ public class kmeans {
     }  
   
     /** 
-     * 构造函数，传入需要分成的簇数量 
+     * 鏋勯�鍑芥暟锛屼紶鍏ラ渶瑕佸垎鎴愮殑绨囨暟閲�
      *  
      * @param k 
-     *            簇数量,若k<=0时，设置为1，若k大于数据源的长度时，置为数据源的长度 
+     *            绨囨暟閲�鑻<=0鏃讹紝璁剧疆涓�锛岃嫢k澶т簬鏁版嵁婧愮殑闀垮害鏃讹紝缃负鏁版嵁婧愮殑闀垮害 
      */  
     public kmeans(int k) {  
         if (k <= 0) {  
@@ -58,7 +58,7 @@ public class kmeans {
     }  
   
     /** 
-     * 初始化 
+     * 鍒濆鍖�
      */  
     private void init() {  
         m = 0;  
@@ -76,11 +76,11 @@ public class kmeans {
     }  
   
     /** 
-     * 如果调用者未初始化数据集，则采用内部测试数据集 
+     * 濡傛灉璋冪敤鑰呮湭鍒濆鍖栨暟鎹泦锛屽垯閲囩敤鍐呴儴娴嬭瘯鏁版嵁闆�
      */  
     private void initDataSet() {  
         dataSet = new ArrayList<float[]>();  
-        // 其中{6,3}是一样的，所以长度为15的数据集分成14簇和15簇的误差都为0  
+        // 鍏朵腑{6,3}鏄竴鏍风殑锛屾墍浠ラ暱搴︿负15鐨勬暟鎹泦鍒嗘垚14绨囧拰15绨囩殑璇樊閮戒负0  
         float[][] dataSetArray = new float[][] { { 8, 2 }, { 3, 4 }, { 2, 5 },  
                 { 4, 2 }, { 7, 3 }, { 6, 2 }, { 4, 7 }, { 6, 3 }, { 5, 3 },  
                 { 6, 3 }, { 6, 9 }, { 1, 6 }, { 3, 9 }, { 4, 1 }, { 8, 6 } };  
@@ -91,9 +91,9 @@ public class kmeans {
     }  
   
     /** 
-     * 初始化中心数据链表，分成多少簇就有多少个中心点 
+     * 鍒濆鍖栦腑蹇冩暟鎹摼琛紝鍒嗘垚澶氬皯绨囧氨鏈夊灏戜釜涓績鐐�
      *  
-     * @return 中心点集 
+     * @return 涓績鐐归泦 
      */  
     private ArrayList<float[]> initCenters() {  
         ArrayList<float[]> center = new ArrayList<float[]>();  
@@ -106,7 +106,7 @@ public class kmeans {
             while (flag) {  
                 temp = random.nextInt(dataSetLength);  
                 int j = 0;  
-                // 不清楚for循环导致j无法加1  
+                // 涓嶆竻妤歠or寰幆瀵艰嚧j鏃犳硶鍔�  
                 // for(j=0;j<i;++j)  
                 // {  
                 // if(temp==randoms[j]);  
@@ -127,7 +127,7 @@ public class kmeans {
             randoms[i] = temp;  
         }  
   
-        // 测试随机数生成情况  
+        // 娴嬭瘯闅忔満鏁扮敓鎴愭儏鍐� 
         // for(int i=0;i<k;i++)  
         // {  
         // System.out.println("test1:randoms["+i+"]="+randoms[i]);  
@@ -135,15 +135,15 @@ public class kmeans {
   
         // System.out.println();  
         for (int i = 0; i < k; i++) {  
-            center.add(dataSet.get(randoms[i]));// 生成初始化中心链表  
+            center.add(dataSet.get(randoms[i]));// 鐢熸垚鍒濆鍖栦腑蹇冮摼琛� 
         }  
         return center;  
     }  
   
     /** 
-     * 初始化簇集合 
+     * 鍒濆鍖栫皣闆嗗悎 
      *  
-     * @return 一个分为k簇的空数据的簇集合 
+     * @return 涓�釜鍒嗕负k绨囩殑绌烘暟鎹殑绨囬泦鍚�
      */  
     private ArrayList<ArrayList<float[]>> initCluster() {  
         ArrayList<ArrayList<float[]>> cluster = new ArrayList<ArrayList<float[]>>();  
@@ -155,13 +155,13 @@ public class kmeans {
     }  
   
     /** 
-     * 计算两个点之间的距离 
+     * 璁＄畻涓や釜鐐逛箣闂寸殑璺濈 
      *  
      * @param element 
-     *            点1 
+     *            鐐� 
      * @param center 
-     *            点2 
-     * @return 距离 
+     *            鐐� 
+     * @return 璺濈 
      */  
     private float distance(float[] element, float[] center) {  
         float distance = 0.0f;  
@@ -174,11 +174,11 @@ public class kmeans {
     }  
   
     /** 
-     * 获取距离集合中最小距离的位置 
+     * 鑾峰彇璺濈闆嗗悎涓渶灏忚窛绂荤殑浣嶇疆 
      *  
      * @param distance 
-     *            距离数组 
-     * @return 最小距离在距离数组中的位置 
+     *            璺濈鏁扮粍 
+     * @return 鏈�皬璺濈鍦ㄨ窛绂绘暟缁勪腑鐨勪綅缃�
      */  
     private int minDistance(float[] distance) {  
         float minDistance = distance[0];  
@@ -187,7 +187,7 @@ public class kmeans {
             if (distance[i] < minDistance) {  
                 minDistance = distance[i];  
                 minLocation = i;  
-            } else if (distance[i] == minDistance) // 如果相等，随机返回一个位置  
+            } else if (distance[i] == minDistance) // 濡傛灉鐩哥瓑锛岄殢鏈鸿繑鍥炰竴涓綅缃� 
             {  
                 if (random.nextInt(10) < 5) {  
                     minLocation = i;  
@@ -203,7 +203,7 @@ public class kmeans {
     }  
   
     /** 
-     * 核心，将当前元素放到最小距离中心相关的簇中 
+     * 鏍稿績锛屽皢褰撳墠鍏冪礌鏀惧埌鏈�皬璺濈涓績鐩稿叧鐨勭皣涓�
      */  
     private void clusterSet() {  
         float[] distance = new float[k];  
@@ -218,19 +218,19 @@ public class kmeans {
             // System.out.println();  
   
             if(minLocation>=0 && minLocation<k)
-            cluster.get(minLocation).add(dataSet.get(i));// 核心，将当前元素放到最小距离中心相关的簇中  
+            cluster.get(minLocation).add(dataSet.get(i));// 鏍稿績锛屽皢褰撳墠鍏冪礌鏀惧埌鏈�皬璺濈涓績鐩稿叧鐨勭皣涓� 
   
         }  
     }  
   
     /** 
-     * 求两点误差平方的方法 
+     * 姹備袱鐐硅宸钩鏂圭殑鏂规硶 
      *  
      * @param element 
-     *            点1 
+     *            鐐� 
      * @param center 
-     *            点2 
-     * @return 误差平方 
+     *            鐐� 
+     * @return 璇樊骞虫柟 
      */  
     private float errorSquare(float[] element, float[] center) {  
         float x = element[0] - center[0];  
@@ -242,7 +242,7 @@ public class kmeans {
     }  
   
     /** 
-     * 计算误差平方和准则函数方法 
+     * 璁＄畻璇樊骞虫柟鍜屽噯鍒欏嚱鏁版柟娉�
      */  
     private void countRule() {  
         float jcF = 0;  
@@ -256,7 +256,7 @@ public class kmeans {
     }  
   
     /** 
-     * 设置新的簇中心方法 
+     * 璁剧疆鏂扮殑绨囦腑蹇冩柟娉�
      */  
     private void setNewCenter() {  
         for (int i = 0; i < k; i++) {  
@@ -267,7 +267,7 @@ public class kmeans {
                     newCenter[0] += cluster.get(i).get(j)[0];  
                     newCenter[1] += cluster.get(i).get(j)[1];  
                 }  
-                // 设置一个平均值  
+                // 璁剧疆涓�釜骞冲潎鍊� 
                 newCenter[0] = newCenter[0] / n;  
                 newCenter[1] = newCenter[1] / n;  
                 center.set(i, newCenter);  
@@ -276,12 +276,12 @@ public class kmeans {
     }  
   
     /** 
-     * 打印数据，测试用 
+     * 鎵撳嵃鏁版嵁锛屾祴璇曠敤 
      *  
      * @param dataArray 
-     *            数据集 
+     *            鏁版嵁闆�
      * @param dataArrayName 
-     *            数据集名称 
+     *            鏁版嵁闆嗗悕绉�
      */  
     public void printDataArray(ArrayList<float[]> dataArray,  
             String dataArrayName) {  
@@ -293,14 +293,14 @@ public class kmeans {
     }  
   
     /** 
-     * Kmeans算法核心过程方法 
+     * Kmeans绠楁硶鏍稿績杩囩▼鏂规硶 
      */  
     private void kmeans() {  
         init();  
         // printDataArray(dataSet,"initDataSet");  
         // printDataArray(center,"initCenter");  
   
-        // 循环分组，直到误差不变为止  
+        // 寰幆鍒嗙粍锛岀洿鍒拌宸笉鍙樹负姝� 
         while (true) {  
             clusterSet();  
             // for(int i=0;i<cluster.size();i++)  
@@ -313,7 +313,7 @@ public class kmeans {
             // System.out.println("count:"+"jc["+m+"]="+jc.get(m));  
   
             // System.out.println();  
-            // 误差不变了，分组完成  
+            // 璇樊涓嶅彉浜嗭紝鍒嗙粍瀹屾垚  
             if (m != 0) {  
                 if (jc.get(m) - jc.get(m - 1) == 0) {  
                     break;  
@@ -327,11 +327,11 @@ public class kmeans {
             cluster = initCluster();  
         }  
   
-        // System.out.println("note:the times of repeat:m="+m);//输出迭代次数  
+        // System.out.println("note:the times of repeat:m="+m);//杈撳嚭杩唬娆℃暟  
     }  
   
     /** 
-     * 执行算法 
+     * 鎵ц绠楁硶 
      */  
     public void execute() {  
         long startTime = System.currentTimeMillis();  
@@ -346,10 +346,10 @@ public class kmeans {
     
     public  static void main(String[] args) throws IOException, FileNotFoundException  
     {  
-        //初始化一个Kmean对象，将k置为10  
+        //鍒濆鍖栦竴涓狵mean瀵硅薄锛屽皢k缃负10  
         kmeans k=new kmeans(4);
         
-        InputStreamReader isr = new InputStreamReader(new FileInputStream("E:\\TD_IDF\\TD_IDF2.txt"), "UTF-8");
+        InputStreamReader isr = new InputStreamReader(new FileInputStream("C:\\Users\\Administrator\\Desktop\\TD_IDF\\TD_IDF_new.txt"), "UTF-8");
 		BufferedReader br = new BufferedReader(isr);
 //		
         ArrayList<float[]> dataSet=new ArrayList<float[]>();  
@@ -376,13 +376,13 @@ public class kmeans {
 //        dataSet.add(new float[]{4,2,5});  
 //        dataSet.add(new float[]{1,9,5});  
 //        dataSet.add(new float[]{7,8,5});  
-        //设置原始数据集  
+        //璁剧疆鍘熷鏁版嵁闆� 
         k.setDataSet(dataSet);
-        //执行算法  
+        //鎵ц绠楁硶  
         k.execute();  
-        //得到聚类结果  
+        //寰楀埌鑱氱被缁撴灉  
         ArrayList<ArrayList<float[]>> cluster=k.getCluster();  
-        //查看结果  
+        //鏌ョ湅缁撴灉  
         for(int i=0;i<cluster.size();i++)  
         {  
             k.printDataArray(cluster.get(i), "cluster["+i+"]");  
