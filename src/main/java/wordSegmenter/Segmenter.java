@@ -15,8 +15,8 @@ import org.apdplat.word.segmentation.Word;
 
 public class Segmenter {
 	
-	private static final String ROOT_PATH = "E:\\corp\\";
-	private static final String RESULT_PATH = "E:\\segResult\\";
+	private static final String ROOT_PATH = "C:\\Users\\Administrator\\Desktop\\corp\\";
+	private static final String RESULT_PATH = "C:\\Users\\Administrator\\Desktop\\segResult\\";
 
 	public static void main(String[] args) throws Exception{
 //		String rootPath = "C:\\Users\\Administrator\\Desktop\\corp\\canyinmeishi\\";

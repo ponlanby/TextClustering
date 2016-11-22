@@ -21,20 +21,18 @@ import vsm.CreateVSM;
 
 public class TF_IDF {
 	private static final String SOURCE_PATH = "C:\\Users\\Administrator\\Desktop\\segResult\\";
-	private static final String RESULT_PATH = "C:\\Users\\Administrator\\Desktop\\TD_IDF\\";
+	private static final String RESULT_PATH = "C:\\Users\\Administrator\\Desktop\\TF_IDF\\";
 	private static final String WORD_SPLITER = ",";	
 	
-	public static void test(File subRoot, ArrayList<String> totalWords) throws Exception{
+	public static void calculateVSM(File subRoot, ArrayList<String> totalWords) throws Exception{
 		File[] directory = subRoot.listFiles();
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 		CreateVSM creator = new CreateVSM();
-		
-//		int txtID = 0;
+
 		for(File dir:directory){
 			File[] txts = dir.listFiles();
 			ArrayList<String> txtNameList = new ArrayList<String>();
-//			ArrayList<int[]> vsmMatrix = new ArrayList<int[]>();
 			int[][] vsmMatrix = new int[txts.length][totalWords.size()];
 			int txtCount = 0;
 			for(File txt:txts){
@@ -65,17 +63,19 @@ public class TF_IDF {
 //				bw.write("\r\n");
 //			}
 //			bw.close();
+			
 			//calculate TF_IDF matrix
-			System.out.println("calculate tfidf in " + dir.getName());			
+			System.out.println("calculate tfidf in " + dir.getName());		
+			System.out.println("size: " + vsmMatrix[0].length);
 			calculateTFIDFMatrix(vsmMatrix);
 			
 		}
 	}
 	
 	public static void calculateTFIDFMatrix(int[][] vsmMatrix) throws Exception, FileNotFoundException{
-		String[][] tfidfMatrix = new String[vsmMatrix.length][vsmMatrix[0].length];
+//		String[][] tfidfMatrix = new String[vsmMatrix.length][vsmMatrix[0].length];
 		//total Txt numbers in this category
-		int numOfTotalTxts = tfidfMatrix.length;
+		int numOfTotalTxts = vsmMatrix.length;
 		//txt numbers containing this word
 		int numOfTxtsContainWord = 0;
 		//the number that the word appears
@@ -91,48 +91,42 @@ public class TF_IDF {
 		
 		int txtCount = 0;
 		for(int i=0; i<vsmMatrix.length; i++){
-			txtCount++;
 			for(int j=0; j<vsmMatrix[i].length; j++){
 				numOfWord = vsmMatrix[i][j];
 				numOfTotalWords = 0;
-				long starTime=System.currentTimeMillis();
+//				long starTime=System.currentTimeMillis();
 				for(int k=0; k<vsmMatrix[i].length; k++){
 					if(vsmMatrix[i][k]!=0){
 						numOfTotalWords += 1;
 					}
 				}
-				long endTime=System.currentTimeMillis();
-				System.out.println(endTime-starTime);
+//				long endTime=System.currentTimeMillis();
+//				System.out.println("step1: " + (endTime-starTime));
 				numOfTxtsContainWord = 0;
-				starTime=System.currentTimeMillis();
+//				starTime=System.currentTimeMillis();
 				for(int k=0; k<vsmMatrix.length; k++){
 					if(vsmMatrix[k][j]!=0){
 						numOfTxtsContainWord++;
 					}
 				}
-				endTime=System.currentTimeMillis();
-				System.out.println(endTime-starTime);
+//				endTime=System.currentTimeMillis();
+//				System.out.println("step2: " + (endTime-starTime));
 				//calculate TF-IDF
 				double TF = (double)numOfWord / (double)numOfTotalWords;
 				double IDF = java.lang.Math.log( (double)numOfTotalTxts / (double)(numOfTxtsContainWord+1) );
 				double TF_IDF = TF * IDF;
 				
-				tfidfMatrix[i][j] = String.valueOf(TF_IDF);
+				bw.write(TF_IDF + ",");
+//				tfidfMatrix[i][j] = String.valueOf(TF_IDF);
 			}
-			for(int l = 0; l<tfidfMatrix[i].length; l++){
-				bw.write(tfidfMatrix[i][l] + ",");
-			}
+//			for(int l = 0; l<tfidfMatrix[i].length; l++){
+//				bw.write(tfidfMatrix[i][l] + ",");
+//			}
 			bw.write("\r\n");
-			System.out.println(txtCount);
+			System.out.println("Text : " + txtCount++);
 		}
 		
-		bw.close();
-		
-		
-//		System.out.println(tfidfMatrix);
-		
-		
-		
+		bw.close();		
 	}
 	
 	public static ArrayList<String> getTotalWordsInDir(File subRoot) throws IOException, FileNotFoundException{
@@ -191,30 +185,14 @@ public class TF_IDF {
 		return new ArrayList<String>(totalWords);
 	}
 	
-//	public static double calculateTF(int numOfWord, int totalWordsInTxt){
-//		double TF = ((double)numOfWord)/((double)totalWordsInTxt);
-//		return TF;
-//	}
-//	
-//	public static double calculateIDF(int totalTxtNum, int txtNumWithTheWord){
-//		double IDF = java.lang.Math.log(((double)totalTxtNum)/((double)(txtNumWithTheWord+1)));
-//		return IDF;
-//	}
-//	
-//	public static double calculateTF_IDF(double TF, double IDF){
-//		double TF_IDF = TF * IDF;
-//		return TF_IDF;
-//	}
-	
 	public static void main(String[] args){
 		try{
 			File root = new File(SOURCE_PATH);
 			File[] subRoots = root.listFiles();
 			for(File subRoot:subRoots){
-				ArrayList<String> totalWords = getTotalWordsInDir(subRoot);
+				ArrayList<String> totalWords = getTotalWordsInDir(subRoot);				
 				System.out.println("get total words in " + subRoot.getName());
-//				generateTD_IDF(subRoot, totalWords);
-				test(subRoot, totalWords);
+				calculateVSM(subRoot, totalWords);
 			}			
 		}
 		catch(Exception e){

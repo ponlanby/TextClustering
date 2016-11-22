@@ -349,7 +349,7 @@ public class kmeans {
         //鍒濆鍖栦竴涓狵mean瀵硅薄锛屽皢k缃负10  
         kmeans k=new kmeans(4);
         
-        InputStreamReader isr = new InputStreamReader(new FileInputStream("C:\\Users\\Administrator\\Desktop\\TD_IDF\\TD_IDF_new.txt"), "UTF-8");
+        InputStreamReader isr = new InputStreamReader(new FileInputStream("C:\\Users\\Administrator\\Desktop\\TD_IDF\\TD_IDF.txt"), "UTF-8");
 		BufferedReader br = new BufferedReader(isr);
 //		
         ArrayList<float[]> dataSet=new ArrayList<float[]>();  
